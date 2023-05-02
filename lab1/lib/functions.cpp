@@ -30,44 +30,39 @@ matrix make_identity(int size) {
     }
     return res;
 }
-std::pair<matrix, matrix> LU(const matrix& mat) {
+void swap_column(matrix& mat, int i, int j) {
+    int size = mat.col();
+    double tmp;
+    for(int k = 0; k < size; k++) {
+        tmp = mat[k][i];
+        mat[k][i] = mat[k][j];
+        mat[k][j] = tmp;
+    }
+}
+std::tuple<matrix, matrix, std::vector<std::pair<int, int>>> LU(const matrix& mat) {
+    std::vector<std::pair<int, int>> P;
     matrix L(mat.size().first, mat.size().second);
+    matrix U = mat;
     for(int i = 0; i < std::min(L.col(), L.row()); i++) {
         L[i][i] = 1;
     }
-    matrix tmp = mat;
-    matrix check;
-    matrix P = make_identity(std::min(L.col(), L.row()));
     for(int j = 0; j < L.row(); j++) {
-        int index = find_index(tmp, j, j);
-        if(index != -1) {
-            std::cout << "first check" << std::endl << L *tmp;
-            std::cout << "matrix P" << std::endl << P;
-            std::swap(tmp[index], tmp[j]);
-            // std::swap(L[index], L[j]);
-            std::swap(P[index], P[j]);
-            std::cout << "after swaping"  << std::endl<< P;
+        int index = find_index(U, j, j);
+        if(index != -1 && index != j) {
+            std::swap(U[index], U[j]);
+            std::swap(L[index], L[j]);
+            swap_column(L, index, j);
+            P.push_back({j, index});
         } else throw std::invalid_argument("matrix is degenerate");
-        check = make_identity(L.col());
         for(int i = j; i < L.col() - 1; i++) {
-            double m = tmp[i + 1][j] / tmp[j][j];
-            double tmp_i_1_j = tmp[i + 1][j];
-            double tmp_j_j = tmp[j][j];
-            std::cout << "befor" << std::endl;
-            std::cout <<tmp;
+            double m = U[i + 1][j] / U[j][j];
             L[i + 1][j] = m;
-            check[i + 1][j] = m;
             for(int k = j; k < L.row(); k++) {
-                tmp[i + 1][k] -= tmp[j][k] * m;
+                U[i + 1][k] -= U[j][k] * m;
             }
-            std::cout << "after" << std::endl;
-            std::cout << tmp;
-            std::cout << "matrix L" << std::endl;
-            std::cout << L;
         }
     }
-    return {P * L,  tmp};
-
+    return {L, U, P};
 }
 std::vector<double> solve_SLAU(const matrix &L, const matrix &U, const std::vector<double>& b) {
 
