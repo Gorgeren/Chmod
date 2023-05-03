@@ -3,7 +3,7 @@
 namespace ChmodLib {
 matrix transpose(const matrix& matr) {
     std::pair<int, int> size = matr.size();
-    matrix res(size.first, size.second);
+    matrix res(size.second, size.first);
 
     for(int i = 0; i < size.second; i++) {
         for(int j = 0; j < size.first; j++) {
@@ -68,10 +68,6 @@ std::tuple<matrix, matrix, std::vector<int>, bool> makeLU(const matrix& mat) {
                 U[i + 1][k] -= U[j][k] * m;
             }
         }
-        std::cout << "matrix U\n";
-        std::cout << U;
-        std::cout << "matrix L\n";
-        std::cout << L;
     }
     return {L, U, P, chet};
 }
@@ -83,9 +79,34 @@ double LU::determinant(const matrix& U, bool chet) {
     }
     return chet ? -1 * res: res;
 }
-std::vector<double> solve_SLAU(const matrix &L, const matrix &U, const std::vector<double>& b) {
+std::vector<double> solve_SLAU(const matrix& A, const std::vector<double>& b) {
+    auto [L, U, P, chet] = makeLU(A);
+    std::vector<double> b_ = permutate2(b, P);
 
+    // Решаем задачу Lz = b, z = Ux.
+    std::vector<double> z(L.row());
+    z[0] = b_[0];
+    for(int i = 1; i < L.col(); i++) {
+        z[i] = b_[i];
+        for(int j = 0; j < i; j++) {
+            z[i] -= z[j] * L[i][j];
+        }
+    }
+
+    // Решаем задачу Ux = z
+    std::vector<double> x(L.col());
+    int last = (int)x.size() - 1;
+    x[last] = z[last] / U[last][last];
+    for(int i = last - 1; i >= 0; i--) {
+        x[i] = z[i];
+        for(int j = last; j > i; j--) {
+            x[i] -= U[i][j] * x[j];
+        }
+        x[i] /= U[i][i];
+    }
+    return x;
 }
+
 
 
 }

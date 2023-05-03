@@ -8,6 +8,7 @@ namespace ChmodLib {
         matrix() = default;
         matrix(int n, int m);
         matrix(std::vector<std::vector<double>> &t);
+        matrix(std::vector<double> &t);
         matrix(const std::initializer_list<std::initializer_list<double>> &list);
 
         matrix(std::pair<int, int> size): n(size.first), m(size.second) {};

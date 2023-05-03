@@ -11,6 +11,9 @@ void matrix::print() {
 std::pair<int, int> matrix::size() const {
     return {n, m};
 }
+matrix::matrix(std::vector<double> &t): n(1), m(t.size()) {
+    mat.push_back(t);
+}
 matrix matrix::operator*(const matrix& p) const {
     if(m != p.n) throw std::invalid_argument("ERROR: matrixs size must be a x m and m x n");
     matrix res(n, p.m);
