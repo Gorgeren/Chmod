@@ -4,26 +4,19 @@
 #include "lib/ChmodLib.h"
 int main() {
     using namespace std;
-    ChmodLib::matrix test({{1, 2 ,3},
-                            {2, 0, 5},
-                            {4, 2, 3}
-                          });
-    cout << test;
-
-    auto [L, U] = ChmodLib::LU(test);
-    cout << "cheking\n";
-    cout << L * U;
+    ChmodLib::matrix A({{1000, 2 ,3},
+                        {2, 100, 5},
+                        {400, 2, 3}
+                       });
+    cout << "matrix A\n";
+    cout << A;
+    auto [L, U, P, chet] = ChmodLib::makeLU(A);
     cout << "matrix L\n";
-    std::cout << L;
+    cout << L;
     cout << "matrix U\n";
-    std::cout << U;
-    // ChmodLib::matrix first({{1, 0, 0, 0},
-    //                         {2, 1, 0, 0},
-    //                         {3, 0, 1, 0},
-    //                         {0, 0, 0, 1}});
-    // ChmodLib::matrix second({{1, 0, 0, 0},
-    //                          {0, 1, 0, 0},
-    //                          {0, 2, 1, 0},
-    //                          {0, 2, 0, 1}});
-
+    cout << U;
+    cout << "determinant of matrix A == ";
+    cout << ChmodLib::LU::determinant(U, chet) << endl;
+    cout << ChmodLib::permutate(L*U, P);
+    
 }

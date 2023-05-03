@@ -74,7 +74,8 @@ matrix operator*(const int num, const matrix& a) {
 std::ostream& operator<<(std::ostream& os, const matrix& mat) {
     for(int i = 0; i < mat.n; i++) {
         for(int j = 0; j < mat.m; j++) {
-            os << std::setw(4) << mat.mat[i][j] << ' ';
+            os.precision(4);
+            os << std::fixed <<std::setw(7) << mat.mat[i][j] << ' ';
         }
         os << '\n';
     }
