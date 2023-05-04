@@ -129,7 +129,7 @@ matrix inverse(const matrix& mat) {
     ans = transpose(ans);
     return ans;
 }
-std::vector<double> SWEEP::solve_SLAU(std::vector<double> &a, std::vector<double>& b, std::vector<double> &c, std::vector<double>& d) {
+std::vector<double> SWEEP::solve_SLAU(const std::vector<double> &a, const std::vector<double>& b, const std::vector<double> &c, const std::vector<double>& d) {
     if(a.size() != b.size() && a.size() != c.size() && a.size() != d.size() && a.size() < 3) throw std::invalid_argument("it is not tridiagonal matrix");
     std::vector<double> P(a.size());
     std::vector<double> Q(a.size());
@@ -146,5 +146,24 @@ std::vector<double> SWEEP::solve_SLAU(std::vector<double> &a, std::vector<double
     }
     return ans;
 }
-        
+matrix SWEEP::makeMatrix(const std::vector<double> &a, const std::vector<double>& b, const std::vector<double> &c) {
+    if(a.size() != b.size() && a.size() != c.size() && a.size() < 3) throw std::invalid_argument("it is not tridiagonal matrix");
+    matrix res(a.size(), a.size());
+    for(int i = 0; i < (int)a.size(); i++) {
+        if(i != 0 && i != (int)a.size() - 1) {
+            res[i][i - 1] = a[i];
+            res[i][i] = b[i];
+            res[i][i + 1] = c[i];
+        }
+        else if(i == 0) {
+            res[i][i] = b[i];
+            res[i][i + 1] = c[i];
+        }
+        else if(i == (int)a.size() - 1 ) {
+            res[i][i] = b[i];
+            res[i][i - 1] = a[i];
+        }
+    }
+    return res;
+}
 }

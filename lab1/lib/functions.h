@@ -44,7 +44,11 @@ namespace ChmodLib {
     // Обратная матрица
     matrix inverse(const matrix& mat);
     namespace SWEEP { // метод прогонки
-        std::vector<double> solve_SLAU(std::vector<double> &a, std::vector<double>& b, std::vector<double> &c, std::vector<double>& d);
+        //решение СЛАУ трехдиогональной матрицы
+        std::vector<double> solve_SLAU(const std::vector<double> &a, const std::vector<double>& b, const std::vector<double> &c, const std::vector<double>& d);
+        //перевод трехдиогональной матрицы, задаваемой тремя векторами в обычную матрицу
+        matrix makeMatrix(const std::vector<double> &a, const std::vector<double>& b, const std::vector<double> &c);
     }
+
 
 }
