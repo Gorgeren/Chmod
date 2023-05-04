@@ -15,9 +15,7 @@ matrix transpose(const matrix& matr) {
 int find_index(const matrix& mat, int _i, int _j) {
     double max = 0;
     int index = 0;
-    bool flag = 1;
     for(int i = _i; i < mat.size().first; i++) {
-        flag = 0;
         if(std::abs(mat[i][_j]) > std::abs(max)) {
             max = std::abs(mat[i][_j]);
             index = i;
@@ -44,7 +42,7 @@ void swap_column(matrix& mat, int i, int j) {
 std::tuple<matrix, matrix, std::vector<int>, bool> makeLU(const matrix& mat) {
     bool chet = 0;
     std::vector<int> P(mat.size().first);
-    for(int i = 0; i < P.size(); i++) P[i] = i;
+    for(int i = 0; i < (int)P.size(); i++) P[i] = i;
     matrix L(mat.size().first, mat.size().second);
     matrix U = mat;
     for(int i = 0; i < std::min(L.col(), L.row()); i++) {
@@ -88,7 +86,7 @@ double determinant(const matrix& A) {
     }
     return chet ? -1 * res: res;
 }
-std::vector<double> solve_SLAU(const matrix& A, const std::vector<double>& b) {
+std::vector<double> LU::solve_SLAU(const matrix& A, const std::vector<double>& b) {
     auto [L, U, P, chet] = makeLU(A);
     std::vector<double> b_ = permutate2(b, P);
 
@@ -120,16 +118,33 @@ matrix inverse(const matrix& mat) {
     matrix tmp = make_identity(mat.col());
     std::vector<double> tmp_b(mat.col());
     matrix ans(mat.col(), mat.col());
-    for(int i = 0; i < tmp_b.size(); i++) {
+    for(int i = 0; i < (int)tmp_b.size(); i++) {
         if(i != 0) {
             tmp_b[i - 1] = 0;
             tmp_b[i] = 1;
         } tmp_b[i] = 1;
-        std::vector<double> tmp = solve_SLAU(mat, tmp_b);
+        std::vector<double> tmp = LU::solve_SLAU(mat, tmp_b);
         ans[i] = tmp;
     }
     ans = transpose(ans);
     return ans;
 }
-
+std::vector<double> SWEEP::solve_SLAU(std::vector<double> &a, std::vector<double>& b, std::vector<double> &c, std::vector<double>& d) {
+    if(a.size() != b.size() && a.size() != c.size() && a.size() != d.size() && a.size() < 3) throw std::invalid_argument("it is not tridiagonal matrix");
+    std::vector<double> P(a.size());
+    std::vector<double> Q(a.size());
+    std::vector<double> ans(a.size());
+    P[0] = -c[0] / b[0];
+    Q[0] =  d[0] / b[0];
+    for(int i = 1; i < (int)a.size() - 1; i++) {
+        P[i] = -c[i]/(b[i] + a[i] * P[i - 1]);
+        Q[i] = (d[i] - a[i] * Q[i - 1]) / (b[i] + a[i] * P[i - 1]);
+    }
+    ans[a.size() - 1] = Q[a.size() - 1];
+    for(int i = a.size() - 2; i > 0; i--) {
+        ans[i] = P[i] * ans[i + 1] + Q[i];
+    }
+    return ans;
+}
+        
 }

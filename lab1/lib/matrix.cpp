@@ -35,7 +35,7 @@ matrix::matrix(const std::initializer_list<std::initializer_list<double>> &list)
         int size = list.begin()->size();
         m = size;
         for(const auto& row: list) {
-            if(size != row.size()) throw std::invalid_argument("ERROR: it is not a matrix");
+            if(size != (int)row.size()) throw std::invalid_argument("ERROR: it is not a matrix");
             mat.push_back(std::vector<double>(row));
         }
     }
@@ -89,8 +89,8 @@ matrix::matrix(std::vector<std::vector<double>> &t) : n(t.size()), m(0),mat(t) {
     if(n > 0) {
         m = t[0].size();
         int tmp = m;
-        for(int i = 0; i < t.size(); i++) {
-            if(t[i].size() != tmp) throw std::invalid_argument("ERROR: it is not a matrix");
+        for(int i = 0; i < (int)t.size(); i++) {
+            if((int)t[i].size() != tmp) throw std::invalid_argument("ERROR: it is not a matrix");
         }
     }
 }

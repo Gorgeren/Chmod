@@ -22,8 +22,9 @@ namespace ChmodLib {
         std::vector<double>& operator[](const int index);
         const std::vector<double>& operator[](int index) const;
     private:
-        std::vector<std::vector<double>> mat;
         int n, m;
+        std::vector<std::vector<double>> mat;
+        
         friend matrix operator*(const int num, const matrix& a);
         friend std::ostream& operator<<(std::ostream& os, const matrix& mat);
     };

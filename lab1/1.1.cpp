@@ -11,7 +11,7 @@ int main() {
                         {-8, -4, -1, -1}});
 
     vector<double> b = {-1, -3, -4, 0};
-    auto x = ChmodLib::solve_SLAU(A, b);
+    auto x = ChmodLib::LU::solve_SLAU(A, b);
     ChmodLib::matrix answer(x);
     for(int i = 0; i < answer.row(); i++) {
         cout << "x" << i+1 << " = " << answer[0][i] << '\n';
