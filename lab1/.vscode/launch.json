@@ -2,11 +2,12 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sokol/chmod/lab1/a.out",
+            "program": "/home/sokol/chmod/Chmod/lab1/a.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
