@@ -12,7 +12,7 @@ namespace ChmodLib {
     std::tuple<matrix, matrix, std::vector<int>, bool> makeLU(const matrix& mat); 
     // Решает СЛАУ с использованием LU разложения
     std::vector<double> solve_SLAU(const matrix& A, const std::vector<double>& b);
-    // Делает обратные перестановки, которые сделаны на матрице P
+    // Делает обратные перестановки, которые сделаны на векторе P
     template <typename T>
     T permutate(T arr, std::vector<int> P) {
         for(int i = 0; i < P.size(); i++) {
@@ -37,5 +37,7 @@ namespace ChmodLib {
         // и информацию о четности количества перестановок
         double determinant(const matrix& U, bool chet);
     }
-
+    double determinant(const matrix& A);
+    // Обратная матрица
+    matrix inverse(const matrix& mat);
 }

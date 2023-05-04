@@ -79,6 +79,15 @@ double LU::determinant(const matrix& U, bool chet) {
     }
     return chet ? -1 * res: res;
 }
+double determinant(const matrix& A) {
+    auto [L, U, P, chet] = makeLU(A);
+    if(U.col() != U.row()) throw std::invalid_argument("The determinant of a non-square matrix does not exist");
+    double res = 1;
+    for(int i = 0; i < U.row(); i++) {
+        res *= U[i][i];
+    }
+    return chet ? -1 * res: res;
+}
 std::vector<double> solve_SLAU(const matrix& A, const std::vector<double>& b) {
     auto [L, U, P, chet] = makeLU(A);
     std::vector<double> b_ = permutate2(b, P);
@@ -107,6 +116,20 @@ std::vector<double> solve_SLAU(const matrix& A, const std::vector<double>& b) {
     return x;
 }
 
-
+matrix inverse(const matrix& mat) {
+    matrix tmp = make_identity(mat.col());
+    std::vector<double> tmp_b(mat.col());
+    matrix ans(mat.col(), mat.col());
+    for(int i = 0; i < tmp_b.size(); i++) {
+        if(i != 0) {
+            tmp_b[i - 1] = 0;
+            tmp_b[i] = 1;
+        } tmp_b[i] = 1;
+        std::vector<double> tmp = solve_SLAU(mat, tmp_b);
+        ans[i] = tmp;
+    }
+    ans = transpose(ans);
+    return ans;
+}
 
 }

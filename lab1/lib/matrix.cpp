@@ -52,7 +52,7 @@ matrix matrix::operator-(const int num) const {
 std::vector<double>& matrix::operator[](const int index) {
     return mat[index];
 }
-const std::vector<double>& matrix::operator[](const int index) const{
+const std::vector<double>& matrix::operator[](const int index) const {
     return mat[index];
 }
 
