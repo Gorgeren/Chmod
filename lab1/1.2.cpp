@@ -25,12 +25,12 @@ int main() {
     cout << "check ans\n";
     cout << A * ch;
     x = ChmodLib::LU::solve_SLAU(A, d);
-    cout << "sweep ans\n";
+    cout << "lu ans\n";
     for(int i: x) cout << i << ' ';
     cout << '\n';
     ChmodLib::matrix l(x);
     l = ChmodLib::transpose(l);
-    cout <<"lu ans\n";
+    cout <<"lu check\n";
     cout << A * l;
 
     ChmodLib::matrix ttt = ChmodLib::SWEEP::makeMatrix(a,b,c);
