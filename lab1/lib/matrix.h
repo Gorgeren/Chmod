@@ -17,10 +17,14 @@ namespace ChmodLib {
         void print();
         std::pair<int, int> size() const;
         matrix operator*(const matrix& p) const;
+        matrix operator-(const matrix& p) const;
+        matrix operator+(const matrix& p) const;
+
         matrix operator-(const int num) const;
         matrix operator*(const int num) const;
         std::vector<double>& operator[](const int index);
         const std::vector<double>& operator[](int index) const;
+        double normC() const;
     private:
         int n, m;
         std::vector<std::vector<double>> mat;

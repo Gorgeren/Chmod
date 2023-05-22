@@ -40,16 +40,5 @@ int main() {
     cout << ttt;
     cout << "_________\n";
     cout << ttt * l;
-    // b1 c1 0  0  0  0  d1 -> x1 = (d1 - c1x2) / b1 
-    // a2 b2 c2 0  0  0  d2 -> a2((d1 - c1) / b1) + b2x + c2
-    // 0  a3 b3 c3 0  0  d3
-    // 0  0  a4 b4 c4 0  d4
-    // 0  0  0  a5 b5 c5 d5
-    // 0  0  0  0  а6 b6 d6
-
-
-    
-    // x1 = -c1/b1 + d1/b1 -> P1 = -c1/b1, Q1 = d1/b1
-
 
 }   

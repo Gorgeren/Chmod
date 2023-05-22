@@ -9,5 +9,7 @@ lab1.1: 1.1.o ./lib/matrix.o ./lib/functions.o
 lab1.2: 1.2.o ./lib/matrix.o ./lib/functions.o
 	$(SOURCE) 1.2.o ./lib/matrix.o ./lib/functions.o -o lab1.2
 
+lab1.3: 1.3.o ./lib/matrix.o ./lib/functions.o
+	$(SOURCE) 1.3.o ./lib/matrix.o ./lib/functions.o -o lab1.3
 clean:
-	rm *.o ./lib/*.o lab1.1 lab1.2
+	rm *.o ./lib/*.o lab1.1 lab1.2 lab1.3

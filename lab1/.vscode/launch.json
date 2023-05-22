@@ -7,7 +7,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/sokol/chmod/Chmod/lab1/a.out",
+            "program": "/home/sokol/chmod/Chmod/lab1/lab1.2",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

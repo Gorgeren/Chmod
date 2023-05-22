@@ -94,4 +94,54 @@ matrix::matrix(std::vector<std::vector<double>> &t) : n(t.size()), m(0),mat(t) {
         }
     }
 }
+double matrix::normC() const{
+    if(n == m) {
+        double max = -1;
+        double curr = 0;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                curr+=std::abs(mat[i][j]);
+            }
+            if(curr > max) max = curr;
+            curr = 0;
+        }
+        return max;
+    } else if (m == 1 && n > 1) {
+        double max = -1;
+        for(int i = 0; i < n; i++) {
+            if(std::abs(mat[i][0]) > max) max = std::abs(mat[i][0]);
+        }
+        return max;
+    } else {
+        std::cout << "Tranpose vector\n";
+        exit(0);
+    }
+    return 0;
+}
+matrix matrix::operator-(const matrix& p) const {
+    if(n != p.col() || m != p.row()) {
+        std::cout << "ERROR in operator- in matrix\n";
+        exit(0);
+    }
+    matrix res(n, m);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            res[i][j] = mat[i][j] - p[i][j];
+        }
+    }
+    return res;
+}
+matrix matrix::operator+(const matrix& p) const {
+    if(n != p.col() || m != p.row()) {
+        std::cout << "ERROR in operator+ in matrix\n";
+        exit(0);
+    }
+    matrix res(n, m);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            res[i][j] = mat[i][j] + p[i][j];
+        }
+    }
+    return res;
+}
 }

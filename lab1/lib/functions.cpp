@@ -131,17 +131,19 @@ matrix inverse(const matrix& mat) {
 }
 std::vector<double> SWEEP::solve_SLAU(const std::vector<double> &a, const std::vector<double>& b, const std::vector<double> &c, const std::vector<double>& d) {
     if(a.size() != b.size() && a.size() != c.size() && a.size() != d.size() && a.size() < 3) throw std::invalid_argument("it is not tridiagonal matrix");
-    std::vector<double> P(a.size());
-    std::vector<double> Q(a.size());
-    std::vector<double> ans(a.size());
+    int n = a.size();
+    std::vector<double> P(n);
+    std::vector<double> Q(n);
+    std::vector<double> ans(n);
     P[0] = -c[0] / b[0];
     Q[0] =  d[0] / b[0];
-    for(int i = 1; i < (int)a.size() - 1; i++) {
+    for(int i = 1; i < n; i++) {
         P[i] = -c[i]/(b[i] + a[i] * P[i - 1]);
         Q[i] = (d[i] - a[i] * Q[i - 1]) / (b[i] + a[i] * P[i - 1]);
     }
-    ans[a.size() - 1] = Q[a.size() - 1];
-    for(int i = a.size() - 2; i > 0; i--) {
+    ans[n - 1] = Q[n - 1];
+
+    for(int i = n - 2; i >= 0; i--) {
         ans[i] = P[i] * ans[i + 1] + Q[i];
     }
     return ans;
@@ -165,5 +167,109 @@ matrix SWEEP::makeMatrix(const std::vector<double> &a, const std::vector<double>
         }
     }
     return res;
+}
+std::pair<matrix, int> ITER::solve_SLAU_simple(ChmodLib::matrix &A, ChmodLib::matrix &B, double eps) {
+    int iterations = 0;
+    int n = A.col();
+    matrix beta(n, 1);
+    matrix alpha(n, n);
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(i != j) {
+                if(A[i][i] == 0) {
+                    std::cout << "did not have time to make a method with permutations. This is division by zero.\n";
+                    exit(0);
+                }
+                alpha[i][j] = - A[i][j] / A[i][i];
+            } else alpha[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < n; i++) {
+        beta[i][0] = B[i][0] / A[i][i];
+    }
+    double g = 0;
+    for(int i = 0; i < n; i++) {
+        double h = 0;
+        for(int j = 0; j < n; j++) {
+            h += std::abs(alpha[i][j]);
+        }
+        if(h > g) g = h;
+    }
+    if(g >= 1) {
+        std::cout << "The convergence condition is violated\n";
+        exit(0);
+    }
+    double q = alpha.normC();
+    double normB = beta.normC();
+    double f = ITER::eps(q, normB);
+    matrix xprev = beta;
+    matrix x;
+    // std::cout << "alpha\n";
+    // std::cout << alpha;
+    // std::cout << "beta\n";
+    // std::cout << beta << '\n';
+    while(f > eps) {
+        iterations++;
+        x = beta + alpha * xprev;
+        // std::cout << x << '\n';
+        matrix delta = x - xprev;
+        normB = delta.normC();
+        f = ITER::eps(q, normB);
+        xprev = x;
+    }
+    return {x, iterations};
+}
+std::pair<matrix, int> solve_SLAU_seidel(matrix &A, matrix &B, double eps) {
+    int iterations = 0;
+    int n = A.col();
+    matrix beta(n, 1);
+    matrix alpha(n, n);
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(i != j) {
+                if(A[i][i] == 0) {
+                    std::cout << "did not have time to make a method with permutations. This is division by zero.\n";
+                    exit(0);
+                }
+                alpha[i][j] = - A[i][j] / A[i][i];
+            } else alpha[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < n; i++) {
+        beta[i][0] = B[i][0] / A[i][i];
+    }
+    double g = 0;
+    for(int i = 0; i < n; i++) {
+        double h = 0;
+        for(int j = 0; j < n; j++) {
+            h += std::abs(alpha[i][j]);
+        }
+        if(h > g) g = h;
+    }
+    if(g >= 1) {
+        std::cout << "The convergence condition is violated\n";
+        exit(0);
+    }
+    double q = alpha.normC();
+    double normB = beta.normC();
+    double f = ITER::eps(q, normB);
+    matrix xprev = beta;
+    matrix x;
+    while(f > eps) {
+        iterations++;
+        x = beta + alpha * xprev;
+        matrix delta = x - xprev;
+        normB = delta.normC();
+        f = ITER::eps(q, normB);
+        xprev = x;
+    }
+    return {x, iterations};
+}
+double ITER::eps(double q, double normB) {
+    return (std::abs(q)/(1 - std::abs(q))) * normB;
 }
 }

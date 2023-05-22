@@ -49,6 +49,12 @@ namespace ChmodLib {
         //перевод трехдиогональной матрицы, задаваемой тремя векторами в обычную матрицу
         matrix makeMatrix(const std::vector<double> &a, const std::vector<double>& b, const std::vector<double> &c);
     }
-
-
+    namespace ITER { // Итерационные методы
+        //Нахождение eps(k)
+        double eps(double q, double beta);
+        //Решение СЛАУ методом простых итераций
+        std::pair<matrix, int> solve_SLAU_simple(matrix &A, matrix &B, double eps);
+        //Решение СЛАУ методом итераций Зейделя
+        std::pair<matrix, int> solve_SLAU_seidel(matrix &A, matrix &B, double eps);
+    }
 }
