@@ -21,4 +21,9 @@ int main() {
     auto [ans, iter] = ChmodLib::ITER::solve_SLAU_simple(A, B, eps);
     cout << ChmodLib::transpose(ans);
     std::cout << "iterations: " << iter << '\n';
+    cout << "Seidel method\n";
+    auto [ans2, iter2] = ChmodLib::ITER::solve_SLAU_seidel(A, B, eps);
+    cout << ChmodLib::transpose(ans2);
+    std::cout << "iterations: " << iter2 << '\n';
+
 }

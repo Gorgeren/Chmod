@@ -1,4 +1,4 @@
-SOURCE = g++ -Wall -lm -O2 -std=c++1z 
+SOURCE = g++ -Wall -lm -O2 -std=c++1z -Wextra
 
 %.o: %.cpp
 	$(SOURCE) -c $< -o $@

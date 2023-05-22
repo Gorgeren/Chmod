@@ -221,7 +221,7 @@ std::pair<matrix, int> ITER::solve_SLAU_simple(ChmodLib::matrix &A, ChmodLib::ma
     }
     return {x, iterations};
 }
-std::pair<matrix, int> solve_SLAU_seidel(matrix &A, matrix &B, double eps) {
+std::pair<matrix, int> ITER::solve_SLAU_seidel(matrix &A, matrix &B, double eps) {
     int iterations = 0;
     int n = A.col();
     matrix beta(n, 1);
@@ -258,10 +258,15 @@ std::pair<matrix, int> solve_SLAU_seidel(matrix &A, matrix &B, double eps) {
     double normB = beta.normC();
     double f = ITER::eps(q, normB);
     matrix xprev = beta;
-    matrix x;
+    matrix x = beta;
     while(f > eps) {
         iterations++;
-        x = beta + alpha * xprev;
+        for(int i = 0; i < n; i++) {
+            x[i][0] = beta[i][0];
+            for(int j = 0; j < n; j++) {
+                x[i][0] += alpha[i][j] * x[j][0];
+            }
+        }
         matrix delta = x - xprev;
         normB = delta.normC();
         f = ITER::eps(q, normB);
