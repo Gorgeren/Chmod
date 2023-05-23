@@ -22,7 +22,7 @@ int main() {
     ChmodLib::matrix inversedA = ChmodLib::inverse(A);
     cout << "inversed A\n";
     cout << inversedA;
-    cout << "Сheck that the inverse matrix is correct: A * A^-1\n";
+    cout << "Check that the inverse matrix is correct: A * A^-1\n";
     cout << A * inversedA;
     cout << "determinant of matrix A\n" <<ChmodLib::determinant(A) << endl;
     

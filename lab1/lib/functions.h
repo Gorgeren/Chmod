@@ -1,6 +1,7 @@
 #pragma once
 #include "matrix.h"
 #include <algorithm>
+#include <cmath>
 namespace ChmodLib {
     // транспонирование матриц
     matrix transpose(const matrix& mat);
@@ -56,5 +57,10 @@ namespace ChmodLib {
         std::pair<matrix, int> solve_SLAU_seidel(matrix &A, matrix &B, double eps);
         //Решение СЛАУ методом простых итераций
         std::pair<matrix, int> solve_SLAU_simple(matrix &A, matrix &B, double eps);
+        //Возвращает матрицу U для метода Якоби
+        // matrix U_matrix(int n, int i, int j, double cos, double sin);
+        //Метод вращения Якоби. Возвращает вектор сз, матрицу св и кол-во итераций
+        std::tuple<matrix, matrix, int> YakobiMethod(const matrix& A, double eps); 
+
     }
 }

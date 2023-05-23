@@ -1,5 +1,6 @@
 #include "functions.h"
 #include <algorithm>
+
 namespace ChmodLib {
 matrix transpose(const matrix& matr) {
     std::pair<int, int> size = matr.size();
@@ -277,4 +278,93 @@ std::pair<matrix, int> ITER::solve_SLAU_seidel(matrix &A, matrix &B, double eps)
 double ITER::eps(double q, double normB) {
     return (std::abs(q)/(1 - std::abs(q))) * normB;
 }
+matrix U_matrix(int n, int i, int j, double cos, double sin) {
+    matrix U(n, n);
+    for(int i = 0; i < n; i++) U[i][i] = 1;
+    U[i][i] = cos;
+    U[j][j] = cos;
+    U[i][j] = -sin;
+    U[j][i] = sin;
+    return U;
+}
+std::pair<int, int> getMax(const matrix& A) {
+    int n = A.col();
+    if(A.col() != A.row()) {
+        std::cout << "Something went wrong in func getMax\n";
+        exit(0);
+    }
+    std::pair<int, int> res = {0, 0};
+    double max = -1;
+    for(int i = 0; i < n; i++) {
+        for(int j = i + 1; j < n; j++) {
+            if(std::abs(A[i][j]) > max) {
+                max = abs(A[i][j]);
+                res = {i , j};
+            }
+        }
+    }
+    return res;
+}
+double squareSum(const matrix & A) {
+    double res = 0;
+    int n = A.col();
+    if(A.col() != A.row()) {
+        std::cout << "Something went wrong in func squareSum\n";
+        exit(0);
+    }
+    for(int i = 0; i < n; i++) {
+        for(int j = i + 1; j < n; j++) {
+            res+= std::abs(A[i][j]);
+        }
+    }
+    return res;
+}
+
+std::tuple<matrix, matrix, int> ITER::YakobiMethod(const matrix& A, double eps) {
+    if(A.col() != A.row()) {
+        std::cout << "Something went wrong in func YakobiMethod\n";
+        exit(0);
+    }
+    int n = A.col();
+    matrix V(n, n);
+    for(int i = 0; i < n; i++) {
+        V[i][i] = 1;
+    }
+    double f = std::sqrt(squareSum(A));
+    int iters = 0;
+    matrix Acurr = A;
+    while(f > eps) {
+        if (iters > 5) break;
+        iters++;
+        std::pair<int, int> index = getMax(Acurr);
+        double phi, cos, sin;
+        if(Acurr[index.first][index.first] != Acurr[index.second][index.second]) {
+            double tmp = 2 * (double)Acurr[index.first][index.second] / (double)(Acurr[index.first][index.first] - Acurr[index.second][index.second]);
+            phi = 0.5 * std::atan(tmp);
+            std::cout <<"phi == " <<0.5 * std::atan(tmp)<<" tmp == " << tmp << '\n';
+            std::cout << "true phi == " << phi << '\n';
+            cos = std::cos(phi);
+            sin = std::sin(phi);
+        } else {
+            phi = M_PI / 4;
+            cos = std::cos(phi);
+            sin = std::sin(phi);
+        }
+        matrix U = U_matrix(n, index.first, index.second, cos, sin);
+        Acurr = transpose(U) * Acurr * U;
+        V = V * U;
+        f = std::sqrt(squareSum(Acurr));
+        std::cout << "f == " << f << '\n';
+        std::cout << Acurr;
+        std::cout << "matrix U\n";
+        std::cout << U;
+        std::cout << "index: " << index.first << ' ' << index.second << '\n';
+        std::cout << "sin --" << sin << ' ' << "cos == " << cos << '\n';
+        std::cout << "phi == " << phi << '\n';
+    }
+    matrix res(1, n);
+    for(int i = 0; i < n; i++) res[0][i] = Acurr[i][i];
+    return {res, V, iters};
+}
+
 }
