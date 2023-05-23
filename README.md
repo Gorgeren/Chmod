@@ -9,3 +9,4 @@
 * [lab1.1](https://github.com/Gorgeren/Chmod/blob/main/lab1/1.1.cpp) решение СЛАУ, поиск обратной матрицы, нахождение детерминанта матрицы с помощью LU разложения
 * [lab1.2](https://github.com/Gorgeren/Chmod/blob/main/lab1/1.2.cpp) Решение СЛАУ методом прогонки, входные данные - три вектора(коэффициенты a, b, c) и вектор правых частей
 * [lab1.3](https://github.com/Gorgeren/Chmod/blob/main/lab1/1.3.cpp) Решение СЛАУ методом простых итераций и методом Зейделя.
+* [lab1.4](https://github.com/Gorgeren/Chmod/blob/main/lab1/1.4.cpp) Метод вращения для поиска собственного значения и собственных векторов
